@@ -1,25 +1,16 @@
-import { useEffect, useState } from "react"
 import './App.css'
-import { getRandomFact } from "./services/facts"
+import { useCatFact } from './hooks/useCatFact.js'
 import { useCatImage } from "./hooks/useCatImage.js"
-
-
-const CAT_PREFIX_IMAGE_URL = " https://cataas.com"
 
 
 
 export function App() {
-    const [fact, setFact] = useState()
+    
+    const { fact, refreshFract } = useCatFact()
     const { imageUrl } = useCatImage({ fact })
 
-    // para recuperrar la cita al acargar la pagina 
-    useEffect(() =>{
-        getRandomFact().then(setFact)
-    }, [])
-
     const handleClick =async () => {
-        const newFact = await getRandomFact()
-        setFact(newFact)
+        refreshFract()
      }
 
     return (
@@ -29,7 +20,9 @@ export function App() {
             <button onClick={handleClick}>Get new fact</button>
 
             {fact && <p>{fact}</p>}
-            {imageUrl && <img src={`${CAT_PREFIX_IMAGE_URL}${imageUrl}`} alt={`IMage extracted usig the first three words for ${fact}`}/>}
+            {imageUrl && <img src={imageUrl} alt={`IMage extracted usig the first three words for ${fact}`}/>}
+            
+            {/* <Otro /> */}
         </main>
     )
 }
